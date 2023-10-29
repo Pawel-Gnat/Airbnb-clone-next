@@ -13,3 +13,7 @@ export type CountrySelectValue = {
 	region: string
 	value: string
 }
+
+export type IParams = {
+	listingId?: string
+}

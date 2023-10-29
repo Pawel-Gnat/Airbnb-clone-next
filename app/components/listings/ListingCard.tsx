@@ -1,7 +1,6 @@
 'use client'
 
 import { Listing, Reservation } from '@prisma/client'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { format } from 'date-fns'
@@ -31,7 +30,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
 	actionId = '',
 	actionLabel,
 }) => {
-	const router = useRouter()
 	const { getByValue } = useCountries()
 	const location = getByValue(data.locationValue)
 
