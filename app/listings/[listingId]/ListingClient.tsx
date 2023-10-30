@@ -5,11 +5,11 @@ import toast from 'react-hot-toast'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { differenceInCalendarDays, eachDayOfInterval } from 'date-fns'
-import { Listing, Reservation } from '@prisma/client'
+import { Listing } from '@prisma/client'
 import { Range } from 'react-date-range'
 
+import { SafeReservation, SafeUser } from '@/app/types'
 import useLoginModal from '@/app/hooks/useLoginModal'
-import { SafeUser } from '@/app/types'
 import { categories } from '@/app/components/navbar/Categories'
 import Container from '@/app/components/Container'
 import ListingHead from '@/app/components/listings/ListingHead'
@@ -22,7 +22,7 @@ const initialDateRange = {
 	key: 'selection',
 }
 interface ListingClientProps {
-	reservations?: Reservation[]
+	reservations?: SafeReservation[] | null
 	listing: Listing
 	currentUser?: SafeUser | null
 }
@@ -34,14 +34,16 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], listin
 	const disabledDates = useMemo(() => {
 		let dates: Date[] = []
 
-		reservations.forEach(reservation => {
-			const range = eachDayOfInterval({
-				start: new Date(reservation.startDate),
-				end: new Date(reservation.endDate),
-			})
+		if (reservations) {
+			reservations.forEach(reservation => {
+				const range = eachDayOfInterval({
+					start: new Date(reservation.startDate),
+					end: new Date(reservation.endDate),
+				})
 
-			dates = [...dates, ...range]
-		})
+				dates = [...dates, ...range]
+			})
+		}
 
 		return dates
 	}, [reservations])
@@ -66,8 +68,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], listin
 			.then(() => {
 				toast.success('Listing reserved!')
 				setDateRange(initialDateRange)
-
-				router.refresh()
+				router.push('/trips')
 			})
 			.catch(() => {
 				toast.error('Something went wrong.')
