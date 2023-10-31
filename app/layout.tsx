@@ -6,6 +6,7 @@ import Navbar from './components/navbar/Navbar'
 import RegisterModal from './components/modals/RegisterModal'
 import ToasterProvider from './providers/ToasterProvider'
 import LoginModal from './components/modals/LoginModal'
+import SearchModal from './components/modals/SearchModal'
 import RentModal from './components/modals/RentModal'
 import getCurrentUser from './actions/getCurrentUser'
 
@@ -23,6 +24,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 		<html lang='en'>
 			<body className={font.className}>
 				<ToasterProvider />
+				<SearchModal />
 				<RentModal />
 				<LoginModal />
 				<RegisterModal />
